@@ -18,6 +18,12 @@
  *
 */
 
+const navbarList = document.getElementById('navbar__list');
+const mainContainer = document.querySelector('main');
+
+// List of sections prsent
+const sections = mainContainer.querySelectorAll("section");
+// console.log(navbarList);
 
 /**
  * End Global Variables
@@ -35,6 +41,18 @@
 
 // build the nav
 
+function buildMenu(sectionsList, navbar) {
+  for (let section of sectionsList) {
+    const link = document.createElement('a');
+    const linkText = document.createTextNode(section.dataset.nav);
+
+    link.appendChild(linkText);
+    link.setAttribute('href', "#" + section.id);
+    link.setAttribute('class', 'menu__link');
+
+    navbar.appendChild(link);
+  }
+}
 
 
 // Add class 'active' to section when near top of viewport
@@ -50,7 +68,12 @@
 */
 
 // Build menu
+window.addEventListener('load', () => buildMenu(sections, navbarList));
 
 // Scroll to section on link click
+// navbarList.children.forEach((item, i) => {
+//   item.addEventListener('click', e => console.log('clicked'));
+// });
+
 
 // Set sections as active
