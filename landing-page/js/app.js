@@ -18,12 +18,10 @@
  *
 */
 
-const navbarList = document.getElementById('navbar__list');
-const mainContainer = document.querySelector('main');
-
-// List of sections prsent
-const sections = mainContainer.querySelectorAll("section");
-// console.log(navbarList);
+const navbar = document.querySelector('.navbar__menu');
+const navbarLinks = navbar.querySelector('#navbar__list');
+const main = document.querySelector('main');
+const sections = main.querySelectorAll("section");
 
 /**
  * End Global Variables
@@ -41,8 +39,8 @@ const sections = mainContainer.querySelectorAll("section");
 
 // build the nav
 
-function buildMenu(sectionsList, navbar) {
-  for (let section of sectionsList) {
+function buildNav() {
+  for (let section of sections) {
     const link = document.createElement('a');
     const linkText = document.createTextNode(section.dataset.nav);
 
@@ -50,16 +48,29 @@ function buildMenu(sectionsList, navbar) {
     link.setAttribute('href', "#" + section.id);
     link.setAttribute('class', 'menu__link');
 
-    navbar.appendChild(link);
+    navbarLinks.appendChild(link);
   }
 }
 
-
 // Add class 'active' to section when near top of viewport
 
+function addActiveClass(scrollEvent) {
+  // Listen to scroll event.
+  // If a section's Y position nears the top of viewport:
+  //   add class active
+  // Add scroll event to each section.
+  return;
+}
 
 // Scroll to anchor ID using scrollTO event
 
+function scrollToSection(sectionIdLink) {
+  // Get the Y position of the section.
+  // Scroll to the position.
+
+  let section = main.querySelector(sectionIdLink);
+  console.log(section.clientHeight);
+}
 
 /**
  * End Main Functions
@@ -68,12 +79,19 @@ function buildMenu(sectionsList, navbar) {
 */
 
 // Build menu
-window.addEventListener('load', () => buildMenu(sections, navbarList));
+
+document.addEventListener('DOMContentLoaded', () => buildNav());
 
 // Scroll to section on link click
-// navbarList.children.forEach((item, i) => {
-//   item.addEventListener('click', e => console.log('clicked'));
-// });
+
+navbar.addEventListener('click', e => {
+  e.preventDefault();
+
+  // Obtain the section's Id whose link was clicked
+  let sectionIdLink = e.target.hash;
+
+  scrollToSection(sectionIdLink);
+})
 
 
 // Set sections as active
