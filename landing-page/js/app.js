@@ -23,13 +23,25 @@ const navbarLinks = navbar.querySelector('#navbar__list');
 const main = document.querySelector('main');
 const sections = main.querySelectorAll("section");
 
+// Viewport size
+// const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+
 /**
  * End Global Variables
  * Start Helper Functions
  *
 */
 
+// Checks if the element is within the visible viewport.
+function isVisible(el) {
+  // Get the position of the element within the viewport
+  let bounds = el.getBoundingClientRect();
 
+  return (
+    bounds.top >= 0 && bounds.bottom <= viewportHeight
+  );
+}
 
 /**
  * End Helper Functions
@@ -38,7 +50,6 @@ const sections = main.querySelectorAll("section");
 */
 
 // build the nav
-
 function buildNav() {
   for (let section of sections) {
     const link = document.createElement('a');
@@ -53,23 +64,18 @@ function buildNav() {
 }
 
 // Add class 'active' to section when near top of viewport
-
-function addActiveClass(scrollEvent) {
-  // Listen to scroll event.
-  // If a section's Y position nears the top of viewport:
-  //   add class active
-  // Add scroll event to each section.
-  return;
+function addActiveClass(section) {
+  if (isVisible(section)) {
+    section.classList.add('active');
+  }
 }
 
 // Scroll to anchor ID using scrollTO event
-
 function scrollToSection(sectionIdLink) {
-  // Get the Y position of the section.
-  // Scroll to the position.
-
   let section = main.querySelector(sectionIdLink);
-  console.log(section.clientHeight);
+  let bounds = section.getBoundingClientRect();
+
+  window.scrollTo(0, bounds.y);
 }
 
 /**
