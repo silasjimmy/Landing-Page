@@ -21,10 +21,8 @@
 const navbar = document.querySelector('.navbar__menu');
 const navbarLinks = navbar.querySelector('#navbar__list');
 const main = document.querySelector('main');
-const sections = main.querySelectorAll("section");
-
-// Viewport size
-// const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+const sections = [...main.querySelectorAll("section")];
+const scrollToTopBtn = document.querySelector('.scroll__top');
 const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
 
 /**
@@ -39,7 +37,7 @@ function isVisible(el) {
   let bounds = el.getBoundingClientRect();
 
   return (
-    bounds.top >= 0 && bounds.bottom <= viewportHeight
+    bounds.top < (viewportHeight / 2) && bounds.top >= -200
   );
 }
 
@@ -64,18 +62,34 @@ function buildNav() {
 }
 
 // Add class 'active' to section when near top of viewport
-function addActiveClass(section) {
-  if (isVisible(section)) {
-    section.classList.add('active');
+function addActiveClass() {
+  for (let section of sections) {
+    if (isVisible(section)) {
+      section.classList.add('active-section');
+    }
+    else {
+      section.classList.remove('active-section');
+    }
   }
 }
 
 // Scroll to anchor ID using scrollTO event
 function scrollToSection(sectionIdLink) {
   let section = main.querySelector(sectionIdLink);
-  let bounds = section.getBoundingClientRect();
 
-  window.scrollTo(0, bounds.y);
+  let scrollDistance = section.offsetTop;
+
+  window.scrollTo(0, scrollDistance);
+}
+
+// Show/Hide the scroll to top button
+function showScrollToTopBtn() {
+  if (window.scrollY > (viewportHeight / 2)) {
+    scrollToTopBtn.classList.add('show__btn');
+  }
+  else {
+    scrollToTopBtn.classList.remove('show__btn');
+  }
 }
 
 /**
@@ -85,11 +99,9 @@ function scrollToSection(sectionIdLink) {
 */
 
 // Build menu
-
 document.addEventListener('DOMContentLoaded', () => buildNav());
 
 // Scroll to section on link click
-
 navbar.addEventListener('click', e => {
   e.preventDefault();
 
@@ -97,7 +109,14 @@ navbar.addEventListener('click', e => {
   let sectionIdLink = e.target.hash;
 
   scrollToSection(sectionIdLink);
-})
-
+});
 
 // Set sections as active
+window.addEventListener('scroll', e => addActiveClass());
+
+// Set the hide/show scroll to top button
+window.addEventListener('scroll', () => showScrollToTopBtn());
+
+scrollToTopBtn.addEventListener('click', () => {
+  window.scrollTo(0, 0);
+});
